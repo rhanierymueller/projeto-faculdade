@@ -1,0 +1,13 @@
+/* Label.css */
+.label {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.required-asterisk {
+  color: #e53e3e;
+  font-weight: bold;
+}
