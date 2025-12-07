@@ -1,13 +1,20 @@
 /* Label.css */
 .label {
   font-weight: 600;
-  color: #2d3748;
+  color: #e0e0e0;
   font-size: 14px;
   display: block;
   margin-bottom: 8px;
 }
 
 .required-asterisk {
-  color: #e53e3e;
+  color: #fc8181;
   font-weight: bold;
+}
+
+.signup-text-label {
+  margin-bottom: 0;
+  color: #aaa;
+  font-weight: normal;
+  display: inline;
 }
