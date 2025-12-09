@@ -10,7 +10,7 @@ jest.mock('../../components', () => ({
   ),
 }));
 
-describe('SorteDoDia Screen', () => {
+describe('Tela SorteDoDia', () => {
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -19,13 +19,13 @@ describe('SorteDoDia Screen', () => {
     jest.useRealTimers();
   });
 
-  test('renders initial state correctly', () => {
+  test('renderiza o estado inicial corretamente', () => {
     render(<SorteDoDia />);
     expect(screen.getByText('Sorte do Dia')).toBeInTheDocument();
     expect(screen.getByText('Clique no botão para descobrir sua sorte!')).toBeInTheDocument();
   });
 
-  test('updates phrase when button is clicked', () => {
+  test('atualiza a frase quando o botão é clicado', () => {
     render(<SorteDoDia />);
     const button = screen.getByText('Gerar Nova Frase');
 

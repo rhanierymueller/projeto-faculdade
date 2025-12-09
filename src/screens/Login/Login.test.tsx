@@ -14,7 +14,7 @@ jest.mock('react-router-dom', () => ({
 const mockLogin = jest.fn();
 const mockRegister = jest.fn();
 
-describe('Login Screen', () => {
+describe('Tela de Login', () => {
   beforeEach(() => {
     (useAuth as jest.Mock).mockReturnValue({
       login: mockLogin,
@@ -25,7 +25,7 @@ describe('Login Screen', () => {
     mockRegister.mockClear();
   });
 
-  test('renders login form by default', () => {
+  test('renderiza o formulário de login por padrão', () => {
     render(<Login />);
 
     expect(screen.getByText(/Faça login para continuar/i)).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('Login Screen', () => {
     expect(screen.getByRole('button', { name: /Entrar/i })).toBeInTheDocument();
   });
 
-  test('toggles to register mode', () => {
+  test('alterna para o modo de cadastro', () => {
     render(<Login />);
 
     fireEvent.click(screen.getByText(/Cadastre-se/i));
@@ -45,7 +45,7 @@ describe('Login Screen', () => {
     expect(screen.getByRole('button', { name: /Registrar/i })).toBeInTheDocument();
   });
 
-  test('calls login function on form submission', async () => {
+  test('chama a função de login ao enviar o formulário', async () => {
     render(<Login />);
 
     fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'test@example.com' } });
@@ -58,7 +58,7 @@ describe('Login Screen', () => {
     });
   });
 
-  test('calls register function on form submission in register mode', async () => {
+  test('chama a função de cadastro ao enviar o formulário no modo de cadastro', async () => {
     render(<Login />);
 
     fireEvent.click(screen.getByText(/Cadastre-se/i));

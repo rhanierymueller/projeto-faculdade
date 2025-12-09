@@ -9,7 +9,7 @@ jest.mock('../../services/gemini');
 
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
-describe('Chat Screen', () => {
+describe('Tela de Chat', () => {
   const mockUser = {
     id: '1',
     name: 'Rhaniery',
@@ -29,7 +29,7 @@ describe('Chat Screen', () => {
     jest.clearAllMocks();
   });
 
-  test('renders chat interface with user name', () => {
+  test('renderiza a interface de chat com o nome do usuário', () => {
     render(
       <Chat 
         toggleSidebar={() => {}} 
@@ -41,7 +41,7 @@ describe('Chat Screen', () => {
     expect(screen.getByPlaceholderText(/Pergunte qualquer coisa/i)).toBeInTheDocument();
   });
 
-  test('sends a message and displays response', async () => {
+  test('envia uma mensagem e exibe a resposta', async () => {
     render(
       <Chat 
         toggleSidebar={() => {}} 
@@ -68,7 +68,7 @@ describe('Chat Screen', () => {
     expect(sendMessageToGemini).toHaveBeenCalled();
   });
 
-  test('shows error message on API failure', async () => {
+  test('exibe mensagem de erro em caso de falha na API', async () => {
     (sendMessageToGemini as jest.Mock).mockRejectedValue(new Error('API Error'));
 
     render(

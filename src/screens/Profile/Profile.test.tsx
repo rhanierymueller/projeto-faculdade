@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 jest.mock('../../contexts/AuthContext');
 
-describe('Profile Screen', () => {
+describe('Tela de Perfil', () => {
   const mockUser = {
     id: '1',
     name: 'Rhaniery Mueller',
@@ -27,7 +27,7 @@ describe('Profile Screen', () => {
     jest.clearAllMocks();
   });
 
-  test('renders user information correctly', () => {
+  test('renderiza as informações do usuário corretamente', () => {
     render(<Profile />);
 
     const names = screen.getAllByText('Rhaniery Mueller');
@@ -38,7 +38,7 @@ describe('Profile Screen', () => {
     expect(screen.getByText('Acesso Total')).toBeInTheDocument();
   });
 
-  test('calls deleteAccount when delete button is clicked and confirmed', () => {
+  test('chama deleteAccount quando o botão de excluir é clicado e confirmado', () => {
     render(<Profile />);
 
     const deleteBtn = screen.getByText('Excluir Conta');
@@ -48,7 +48,7 @@ describe('Profile Screen', () => {
     expect(mockDeleteAccount).toHaveBeenCalled();
   });
 
-  test('does not call deleteAccount when delete is cancelled', () => {
+  test('não chama deleteAccount quando a exclusão é cancelada', () => {
     (window.confirm as jest.Mock).mockReturnValue(false);
     render(<Profile />);
 
