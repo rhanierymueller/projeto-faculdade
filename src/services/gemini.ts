@@ -1,5 +1,5 @@
 const API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
-const MODEL = 'gemini-2.5-flash';
+const MODEL = 'gemini-1.5-flash';
 const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
 export interface ChatMessage {
@@ -9,7 +9,8 @@ export interface ChatMessage {
 
 export const sendMessageToGemini = async (messages: ChatMessage[]) => {
   if (!API_KEY) {
-   return
+    console.error('API Key is missing');
+    return 'Desculpe, não estou configurada corretamente no momento (Chave de API ausente).';
   }
 
   try {

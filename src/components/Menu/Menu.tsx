@@ -1,13 +1,11 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import './Menu.css';
 
 interface MenuProps {
   isOpen: boolean;
   onClose: () => void;
-  isLoggedIn: boolean;
-  user: { name: string; email: string } | null;
-  onLogout: () => void;
   onNewChat?: () => void;
 }
 
@@ -26,13 +24,20 @@ const LogOutIcon = () => (
 const LoginIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
 );
+const UserIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+);
+const CloverIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+);
 
-const Menu: React.FC<MenuProps> = ({ isOpen, onClose, isLoggedIn, user, onLogout, onNewChat }) => {
+const Menu: React.FC<MenuProps> = ({ isOpen, onClose, onNewChat }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const handleLogoutClick = () => {
-    onLogout();
+    logout();
     navigate('/');
   };
 
@@ -57,18 +62,26 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose, isLoggedIn, user, onLogout
           <EditIcon />
         </a>
 
-        {!isLoggedIn && (
-           <div style={{ marginTop: 'auto' }}>
-           </div>
+        {isAuthenticated && (
+          <div className="menu-links">
+             <Link to="/sorte-do-dia" className={`menu-link ${location.pathname === '/sorte-do-dia' ? 'active' : ''}`}>
+               <CloverIcon />
+               <span>Sorte do Dia</span>
+             </Link>
+             <Link to="/perfil" className={`menu-link ${location.pathname === '/perfil' ? 'active' : ''}`}>
+               <UserIcon />
+               <span>Meu Perfil</span>
+             </Link>
+          </div>
         )}
       </div>
 
       <div className="user-profile-section">
-        {isLoggedIn ? (
+        {isAuthenticated && user ? (
           <div className="user-profile logged-in">
             <div className="user-info">
-              <div className="user-name">{user?.email}</div>
-              <div className="user-plan-badge pro">Versão Pro</div>
+              <div className="user-name">{user.name}</div>
+              <div className="user-plan-badge pro">Versão {user.plan === 'pro' ? 'Pro' : 'Free'}</div>
             </div>
             <button className="logout-btn" onClick={handleLogoutClick} title="Sair">
               <LogOutIcon />

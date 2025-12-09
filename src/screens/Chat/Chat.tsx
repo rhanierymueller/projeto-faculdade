@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Chat.css';
 import { sendMessageToGemini, ChatMessage } from '../../services/gemini';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface Message {
   id: string;
@@ -17,7 +18,8 @@ interface ChatProps {
   shouldReset?: boolean;
 }
 
-const Chat: React.FC<ChatProps> = ({ toggleSidebar, isSidebarOpen, isLoggedIn, onNewChat, shouldReset }) => {
+const Chat: React.FC<ChatProps> = ({ toggleSidebar, isSidebarOpen, shouldReset }) => {
+  const { isAuthenticated, user } = useAuth();
   const [textInput, setTextInput] = useState('');
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -58,14 +60,16 @@ const Chat: React.FC<ChatProps> = ({ toggleSidebar, isSidebarOpen, isLoggedIn, o
     setIsProcessing(true);
 
     try {
-      const conversation: ChatMessage[] = [...chatHistory, userMsg].map(m => ({
+      const conversation: ChatMessage[] = chatHistory.map(m => ({
         role: m.sender === 'user' ? 'user' : 'assistant',
         content: m.text
       }));
+      
+      conversation.push({ role: 'user', content: userMsg.text });
 
       conversation.unshift({
         role: 'system',
-        content: `Você é a Serena AI, uma terapeuta virtual acolhedora, empática e profissional. Seu objetivo é escutar ativamente, validar os sentimentos do usuário e oferecer suporte emocional.`
+        content: `Você é a Serena AI, uma terapeuta virtual acolhedora, empática e profissional. Seu objetivo é escutar ativamente, validar os sentimentos do usuário e oferecer suporte emocional. O nome do usuário é ${user?.name || 'Visitante'}.`
       });
 
       const response = await sendMessageToGemini(conversation);
@@ -109,15 +113,15 @@ const Chat: React.FC<ChatProps> = ({ toggleSidebar, isSidebarOpen, isLoggedIn, o
           <div className="model-selector">
             Serena AI 
             <span className="model-version" style={{ marginLeft: '8px' }}>
-              {isLoggedIn ? 'Versão Pro' : 'Versão Free'}
+              {isAuthenticated ? 'Versão Pro' : 'Versão Free'}
             </span> 
           </div>
         </div>
         
         <div className="top-actions">
-           {isLoggedIn && (
+           {isAuthenticated && (
              <div className="action-icon">
-               <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>R</span>
+               <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{user?.name?.[0]?.toUpperCase()}</span>
              </div>
            )}
         </div>
@@ -127,14 +131,14 @@ const Chat: React.FC<ChatProps> = ({ toggleSidebar, isSidebarOpen, isLoggedIn, o
         {chatHistory.length === 0 ? (
           <div className="empty-state-content">
             <h1 className="greeting-text">
-              {isLoggedIn ? 'Bem-vindo de volta, Rhaniery' : 'Como posso ajudar?'}
+              {isAuthenticated ? `Bem-vindo de volta, ${user?.name?.split(' ')[0]}` : 'Como posso ajudar?'}
             </h1>
           </div>
         ) : (
           chatHistory.map((msg) => (
             <div key={msg.id} className={`message-row ${msg.sender} ${msg.isError ? 'error-message' : ''}`}>
                <div className="message-avatar">
-                 {msg.sender === 'ai' ? 'S' : 'R'}
+                 {msg.sender === 'ai' ? 'S' : (user?.name?.[0]?.toUpperCase() || 'R')}
                </div>
                <div className="message-content">
                  {msg.text}

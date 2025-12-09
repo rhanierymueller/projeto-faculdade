@@ -1,60 +1,65 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input, Label, FormGroup } from '../../components';
+import { useAuth } from '../../contexts/AuthContext';
 import './Login.css';
 
-interface LoginProps {
-  onLogin?: (email: string, password: string) => void;
-}
-
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
+const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { login, register, error: authError } = useAuth();
+  
   const [isRegistering, setIsRegistering] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setLocalError('');
     
     if (!email || !password) {
-      setError('Por favor, preencha todos os campos');
+      setLocalError('Por favor, preencha todos os campos');
       return;
     }
 
     if (isRegistering) {
       if (!name) {
-        setError('Por favor, informe seu nome');
+        setLocalError('Por favor, informe seu nome');
         return;
       }
       if (password !== confirmPassword) {
-        setError('As senhas não coincidem');
+        setLocalError('As senhas não coincidem');
         return;
       }
     }
 
     setIsLoading(true);
     
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      if (onLogin) {
-        onLogin(email, password);
+    try {
+      if (isRegistering) {
+        await register(name, email, password);
+      } else {
+        await login(email, password);
       }
       navigate('/');
-    }, 1000);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const toggleMode = () => {
     setIsRegistering(!isRegistering);
-    setError('');
+    setLocalError('');
     setPassword('');
     setConfirmPassword('');
   };
+
+  const displayError = localError || authError;
 
   return (
     <div className="login-container">
@@ -67,7 +72,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
-          <FormGroup error={!!error} errorMessage={error}>
+          <FormGroup error={!!displayError} errorMessage={displayError || ''}>
             {isRegistering && (
               <div style={{ marginBottom: '1rem' }}>
                 <Label htmlFor="name" required>Nome</Label>

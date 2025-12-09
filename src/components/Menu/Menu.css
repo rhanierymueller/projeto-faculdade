@@ -164,3 +164,34 @@
   border-radius: 4px;
   margin-left: auto;
 }
+
+/* New Styles */
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  color: #ececf1;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.menu-link:hover {
+  background-color: #2f2f2f;
+}
+
+.menu-link.active {
+  background-color: #343541;
+}
+
+.menu-link svg {
+  color: #ececf1;
+}
