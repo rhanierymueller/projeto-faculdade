@@ -69,7 +69,7 @@ const Chat: React.FC<ChatProps> = ({ toggleSidebar, isSidebarOpen, shouldReset }
 
       conversation.unshift({
         role: 'system',
-        content: `Você é a Serena AI, uma terapeuta virtual acolhedora, empática e profissional. Seu objetivo é escutar ativamente, validar os sentimentos do usuário e oferecer suporte emocional. O nome do usuário é ${user?.name || 'Visitante'}.`
+        content: `Você é a Serena AI, uma terapeuta virtual acolhedora, empática e profissional. Seu objetivo é escutar ativamente, validar os sentimentos do usuário e oferecer suporte emocional.${user?.name ? ` O nome do usuário é ${user.name}.` : ''}`
       });
 
       const response = await sendMessageToGemini(conversation);
