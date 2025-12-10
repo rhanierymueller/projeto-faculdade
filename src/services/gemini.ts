@@ -9,8 +9,8 @@ export interface ChatMessage {
 
 export const sendMessageToGemini = async (messages: ChatMessage[]) => {
   if (!API_KEY) {
-    console.error('API Key is missing');
-    return 'Desculpe, não estou configurada corretamente no momento (Chave de API ausente).';
+    console.error('Esta faltando a chave da api no environment');
+   return
   }
 
   try {

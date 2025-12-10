@@ -29,7 +29,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: #667eea;
 }
 
 .login-header {
@@ -38,11 +38,11 @@
 }
 
 .login-title {
-  font-size: 2.5rem;
+  font-size: 40px;
   font-weight: 700;
   color: #fff;
   margin: 0 0 8px 0;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #667eea;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -111,6 +111,6 @@
   }
   
   .login-title {
-    font-size: 2rem;
+    font-size: 32px;
   }
 }

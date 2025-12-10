@@ -84,7 +84,7 @@ const Chat: React.FC<ChatProps> = ({ toggleSidebar, isSidebarOpen, shouldReset }
     } catch (error: any) {
       const errorMsg: Message = {
         id: (Date.now() + 1).toString(),
-        text: 'Erro ao processar a mensagem. Tente novamente.',
+        text: 'Erro',
         sender: 'ai',
         isError: true
       };
@@ -121,7 +121,7 @@ const Chat: React.FC<ChatProps> = ({ toggleSidebar, isSidebarOpen, shouldReset }
         <div className="top-actions">
            {isAuthenticated && (
              <div className="action-icon">
-               <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{user?.name?.[0]?.toUpperCase()}</span>
+               <span style={{ fontSize: '14.4px', fontWeight: 500 }}>{user?.name?.[0]?.toUpperCase()}</span>
              </div>
            )}
         </div>

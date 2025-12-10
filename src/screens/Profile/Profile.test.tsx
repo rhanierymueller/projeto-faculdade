@@ -9,7 +9,7 @@ describe('Tela de Perfil', () => {
   const mockUser = {
     id: '1',
     name: 'Rhaniery Mueller',
-    email: 'rhaniery@example.com',
+    email: 'rhaniery@test.com',
     plan: 'pro' as const,
   };
 
@@ -33,7 +33,7 @@ describe('Tela de Perfil', () => {
     const names = screen.getAllByText('Rhaniery Mueller');
     expect(names).toHaveLength(2);
     
-    expect(screen.getByText('rhaniery@example.com')).toBeInTheDocument();
+    expect(screen.getByText('rhaniery@test.com')).toBeInTheDocument();
     expect(screen.getByText('Pro')).toBeInTheDocument();
     expect(screen.getByText('Acesso Total')).toBeInTheDocument();
   });

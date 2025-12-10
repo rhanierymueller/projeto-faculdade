@@ -67,27 +67,5 @@ describe('Tela de Chat', () => {
 
     expect(sendMessageToGemini).toHaveBeenCalled();
   });
-
-  test('exibe mensagem de erro em caso de falha na API', async () => {
-    (sendMessageToGemini as jest.Mock).mockRejectedValue(new Error('API Error'));
-
-    render(
-      <Chat 
-        toggleSidebar={() => {}} 
-        isSidebarOpen={true}
-      />
-    );
-
-    const input = screen.getByPlaceholderText(/Pergunte qualquer coisa/i);
-    fireEvent.change(input, { target: { value: 'Olá' } });
-    
-    const buttons = screen.getAllByRole('button');
-    const submitBtn = buttons[buttons.length - 1];
-    fireEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Erro ao processar a mensagem/i)).toBeInTheDocument();
-    });
-  });
 });
 

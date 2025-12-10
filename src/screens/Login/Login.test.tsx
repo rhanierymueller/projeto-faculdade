@@ -48,13 +48,13 @@ describe('Tela de Login', () => {
   test('chama a função de login ao enviar o formulário', async () => {
     render(<Login />);
 
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'test@example.com' } });
-    fireEvent.change(screen.getByLabelText(/Senha/i), { target: { value: 'password123' } });
+    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'rhaniery@test.com' } });
+    fireEvent.change(screen.getByLabelText(/Senha/i), { target: { value: '123' } });
     
     fireEvent.click(screen.getByRole('button', { name: /Entrar/i }));
 
     await waitFor(() => {
-      expect(mockLogin).toHaveBeenCalledWith('test@example.com', 'password123');
+      expect(mockLogin).toHaveBeenCalledWith('rhaniery@test.com', '123');
     });
   });
 
@@ -64,14 +64,14 @@ describe('Tela de Login', () => {
     fireEvent.click(screen.getByText(/Cadastre-se/i));
 
     fireEvent.change(screen.getByLabelText(/Nome/i), { target: { value: 'Test User' } });
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'test@example.com' } });
-    fireEvent.change(screen.getByLabelText(/^Senha/i), { target: { value: 'password123' } }); 
-    fireEvent.change(screen.getByLabelText(/Confirmar Senha/i), { target: { value: 'password123' } });
+    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'rhaniery@test.com' } });
+    fireEvent.change(screen.getByLabelText(/^Senha/i), { target: { value: '123' } }); 
+    fireEvent.change(screen.getByLabelText(/Confirmar Senha/i), { target: { value: '123' } });
     
     fireEvent.click(screen.getByRole('button', { name: /Registrar/i }));
 
     await waitFor(() => {
-      expect(mockRegister).toHaveBeenCalledWith('Test User', 'test@example.com', 'password123');
+      expect(mockRegister).toHaveBeenCalledWith('Test User', 'rhaniery@test.com', '123');
     });
   });
 });

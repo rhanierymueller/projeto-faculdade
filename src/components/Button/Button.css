@@ -24,7 +24,7 @@
 }
 
 .button-primary {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #667eea;
   color: white;
 }
 
@@ -61,8 +61,9 @@
 }
 
 .button-ghost:hover:not(:disabled) {
-  background: #667eea1a;
-  border-color: #667eea;
+  background: transparent;
+  border-color: transparent;
+  opacity: 0.8;
 }
 
 .button-small {

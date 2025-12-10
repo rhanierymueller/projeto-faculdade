@@ -10,7 +10,7 @@ export const Profile: React.FC = () => {
   }
 
   const handleDeleteAccount = () => {
-    if (window.confirm('Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.')) {
+    if (window.confirm('Você realmente quer excluir sua conta?')) {
       deleteAccount();
     }
   };
@@ -29,7 +29,7 @@ export const Profile: React.FC = () => {
           <div className="profile-avatar">{initials}</div>
           <div>
             <h1 className="profile-title">{user.name}</h1>
-            <p className="profile-subtitle">Membro desde 2024</p>
+            <p className="profile-subtitle">Membro desde 2025</p>
           </div>
         </div>
 
@@ -51,7 +51,7 @@ export const Profile: React.FC = () => {
                 {user.plan === 'pro' ? 'Pro' : 'Gratuito'}
               </span>
               {user.plan === 'pro' && (
-                <span style={{ fontSize: '0.9rem', color: '#6ee7b7' }}>
+                <span style={{ fontSize: '14.4px', color: '#6ee7b7' }}>
                   Acesso Total
                 </span>
               )}

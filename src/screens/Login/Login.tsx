@@ -21,17 +21,17 @@ const Login: React.FC = () => {
     setLocalError('');
     
     if (!email || !password) {
-      setLocalError('Por favor, preencha todos os campos');
+      setLocalError('Prencha todos os campos');
       return;
     }
 
     if (isRegistering) {
       if (!name) {
-        setLocalError('Por favor, informe seu nome');
+        setLocalError('Informe seu nome');
         return;
       }
       if (password !== confirmPassword) {
-        setLocalError('As senhas não coincidem');
+        setLocalError('As senhas não estão iguais');
         return;
       }
     }
@@ -74,7 +74,7 @@ const Login: React.FC = () => {
         <form onSubmit={handleSubmit} className="login-form">
           <FormGroup error={!!displayError} errorMessage={displayError || ''}>
             {isRegistering && (
-              <div style={{ marginBottom: '1rem' }}>
+              <div style={{ marginBottom: '16px' }}>
                 <Label htmlFor="name" required>Nome</Label>
                 <Input
                   type="text"

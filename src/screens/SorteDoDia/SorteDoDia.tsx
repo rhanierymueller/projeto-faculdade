@@ -36,7 +36,6 @@ export const SorteDoDia: React.FC = () => {
   return (
     <div className="sorte-container">
       <div className="sorte-card">
-        <div className="sorte-icon">🍀</div>
         <h1 className="sorte-title">Sorte do Dia</h1>
         <p>Sua dose diária de inspiração.</p>
         

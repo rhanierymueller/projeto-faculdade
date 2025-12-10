@@ -3,7 +3,7 @@ import { User, AuthContextType } from '../types/auth';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,8 +30,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(sessionUser);
       localStorage.setItem('currentUser', JSON.stringify(sessionUser));
     } else {
-      setError('Email ou senha incorretos.');
-      throw new Error('Email ou senha incorretos.');
+      setError('Email ou senha incorretos');
+      throw new Error('Email ou senha incorretos');
     }
   };
 
@@ -43,8 +43,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const users: User[] = usersStr ? JSON.parse(usersStr) : [];
 
     if (users.find(u => u.email === email)) {
-      setError('Este email já está cadastrado.');
-      throw new Error('Este email já está cadastrado.');
+      setError('Email já cadastrado');
+      throw new Error('Email já cadastrado');
     }
 
     const newUser: User = {
@@ -74,7 +74,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const usersStr = localStorage.getItem('users');
     if (usersStr) {
       const users: User[] = JSON.parse(usersStr);
-      const updatedUsers = users.filter(u => u.email !== user.email);
+      const updatedUsers = users.filter((u: { email: string; }) => u.email !== user.email);
       localStorage.setItem('users', JSON.stringify(updatedUsers));
     }
 
@@ -91,7 +91,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuth esta undefined');
   }
   return context;
 };
