@@ -4,7 +4,7 @@ const API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const MODELS = [
   "models/gemini-2.5-flash",
   "models/gemini-2.5-flash-lite",
-  "models/gemini-2.0-flash"
+  "models/gemini-2.0-flash",
 ];
 
 const MAX_RETRIES_PER_MODEL = 2;
@@ -24,30 +24,30 @@ export const sendMessageToGemini = async (messages: ChatMessage[]) => {
   }
 
   try {
-    const systemMessage = messages.find(m => m.role === "system");
-    const conversation = messages.filter(m => m.role !== "system");
+    const systemMessage = messages.find((m) => m.role === "system");
+    const conversation = messages.filter((m) => m.role !== "system");
 
     const contents: any[] = [];
 
     if (systemMessage) {
       contents.push({
         role: "user",
-        parts: [{ text: systemMessage.content }]
+        parts: [{ text: systemMessage.content }],
       });
     }
 
     contents.push(
-      ...conversation.map(msg => ({
+      ...conversation.map((msg) => ({
         role: msg.role === "user" ? "user" : "model",
-        parts: [{ text: msg.content }]
+        parts: [{ text: msg.content }],
       }))
     );
 
     const payload = {
       contents,
       generationConfig: {
-        temperature: 0.7
-      }
+        temperature: 0.7,
+      },
     };
 
     for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
@@ -59,19 +59,21 @@ export const sendMessageToGemini = async (messages: ChatMessage[]) => {
           const response = await fetch(`${baseUrl}?key=${API_KEY}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
           });
 
           if (response.ok) {
             const data = await response.json();
             if (modelIndex > 0 || attempt > 0) {
-              console.log(`✓ Sucesso com modelo fallback: ${currentModel} (tentativa ${attempt + 1})`);
+              console.log(
+                `Sucesso com modelo: ${currentModel}`
+              );
             }
             return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
           }
 
           if (response.status === 404) {
-            console.warn(`Modelo ${currentModel} não encontrado. Tentando próximo modelo...`);
+            console.warn(`Modelo ${currentModel} não encontrado.`);
             break;
           }
 
@@ -80,11 +82,11 @@ export const sendMessageToGemini = async (messages: ChatMessage[]) => {
             const isLastModel = modelIndex === MODELS.length - 1;
 
             if (isLastAttempt && !isLastModel) {
-              console.warn(`Modelo ${currentModel} sobrecarregado. Tentando próximo modelo...`);
+              console.warn(`Modelo ${currentModel} sobrecarregado`);
               break;
             } else if (!isLastAttempt) {
               const delay = INITIAL_RETRY_DELAY * Math.pow(2, attempt);
-              console.warn(`Modelo ${currentModel} sobrecarregado. Retentando em ${delay}ms...`);
+              console.warn(`Modelo ${currentModel} sobrecarregado.`);
               await sleep(delay);
               continue;
             }
@@ -93,29 +95,18 @@ export const sendMessageToGemini = async (messages: ChatMessage[]) => {
           const error = await response.json();
           console.error(error);
           throw new Error(error.error?.message);
-
         } catch (error: any) {
           const isLastAttempt = attempt === MAX_RETRIES_PER_MODEL - 1;
           const isLastModel = modelIndex === MODELS.length - 1;
-          
+
           if (isLastModel && isLastAttempt) {
-            throw error;
-          }
-          
-          if (error.message?.includes('not found') || error.message?.includes('404')) {
-            console.warn(`Erro com modelo ${currentModel}. Tentando próximo modelo...`);
-            break;
-          }
-          
-          if (!error.message?.includes('503')) {
             throw error;
           }
         }
       }
     }
 
-    throw new Error("Todos os modelos estão indisponíveis no momento. Tente novamente mais tarde.");
-
+    throw new Error("Nenhu modelo disponivel");
   } catch (error) {
     console.error(error);
     throw error;
