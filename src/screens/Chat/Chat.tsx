@@ -64,19 +64,21 @@ const Chat: React.FC<ChatProps> = ({
     setIsProcessing(true);
 
     try {
-      const conversation: ChatMessage[] = chatHistory.map((m) => ({
-        role: m.sender === "user" ? "user" : "assistant",
-        content: m.text,
-      }));
-
-      conversation.push({ role: "user", content: userMsg.text });
-
-      conversation.unshift({
+      const systemMessage: ChatMessage = {
         role: "system",
         content: `Você é a Serena AI, uma terapeuta virtual acolhedora, empática e profissional. Seu objetivo é escutar ativamente, validar os sentimentos do usuário e oferecer suporte emocional.${
           user?.name ? ` O nome do usuário é ${user.name}.` : ""
         }`,
-      });
+      };
+
+      const conversation: ChatMessage[] = [
+        systemMessage,
+        ...chatHistory.map((m) => ({
+          role: (m.sender === "user" ? "user" : "assistant") as "user" | "assistant",
+          content: m.text,
+        })),
+        { role: "user" as const, content: userMsg.text },
+      ];
 
       const response = await sendMessageToGemini(conversation);
 
